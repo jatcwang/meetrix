@@ -6,10 +6,7 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import org.http4s.{EntityDecoder, EntityEncoder}
 import org.http4s.circe.{jsonEncoderOf, jsonOf}
 
-final case class User(
-  name: String,
-  age: Int
-)
+final case class User(name: String, age: Int)
 
 object User {
   // We know how to encode a case class to a JSON (and decode from JSON)
@@ -33,4 +30,3 @@ object User {
   // - Set the HTTP header "Content-Type" to "application/json"
   implicit val entityEncoder: EntityEncoder[IO, User] = jsonEncoderOf[IO, User]
 }
-

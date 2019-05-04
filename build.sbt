@@ -4,12 +4,32 @@ val ScalaTestVersion = "3.0.7"
 val LogbackVersion   = "1.2.3"
 
 lazy val root = Project("root", file("."))
-  .aggregate(server)
+  .aggregate(server, cli)
   .settings(
     organization := "org.scalabridge",
     name := "meetrix",
     version := "0.0.1-SNAPSHOT",
   )
+
+lazy val cli = Project("cli", file("cli"))
+  .settings(
+    libraryDependencies ++= Seq(
+       // Our http library, both for running the server and HTTP client
+      "org.http4s" %% "http4s-blaze-client" % Http4sVersion,
+      "org.http4s" %% "http4s-circe" % Http4sVersion, // Integration with Circe for handling JSON request/response bodies
+
+      // JSON library
+      "io.circe" %% "circe-core" % CirceVersion,
+      "io.circe" %% "circe-generic" % CirceVersion,
+
+      // Test library
+      "org.scalatest" %% "scalatest" % ScalaTestVersion % "test",
+
+      // Logging library
+      "ch.qos.logback" % "logback-classic" % LogbackVersion
+    )
+  )
+  .settings(commonSettings)
 
 lazy val server = Project("server", file("server"))
   .settings(
