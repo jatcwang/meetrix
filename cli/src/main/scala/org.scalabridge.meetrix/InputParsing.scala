@@ -1,6 +1,6 @@
 package org.scalabridge.meetrix
 
-import org.scalabridge.meetrix.models.{CommandInput, ListCmdInput, SearchCmdInput}
+import org.scalabridge.meetrix.models.CommandInput
 
 /** Functions which are used to parse user input (command line arguments) */
 object InputParsing {
@@ -13,17 +13,24 @@ object InputParsing {
 
       case firstArg :: others =>
         firstArg match {
-          case "list"          => parseListCmdInput(others)
-          case "search"        => parseSearchCmdInput(others)
+          case "myevents" => parsePastEventsCommand(others)
+          case "mygroups" => parseListMyGroupsCommand(others)
+          /* TODO: match other commands like findgroups and findevents! */
           case unrecognizedCmd => Left(ParseError(s"Unrecognized command $unrecognizedCmd"))
         }
     }
   }
 
-  def parseListCmdInput(args: List[String]): Either[ParseError, ListCmdInput] =
+  def parsePastEventsCommand(args: List[String]): Either[ParseError, CommandInput.ListPastEvents] =
     ???
 
-  def parseSearchCmdInput(args: List[String]): Either[ParseError, SearchCmdInput] =
+  def parseListMyGroupsCommand(args: List[String]): Either[ParseError, CommandInput.ListMyGroups] =
+    ???
+
+  def parseFindGroupsCommand(args: List[String]): Either[ParseError, CommandInput.FindGroups] =
+    ???
+
+  def parseFindEvents(args: List[String]): Either[ParseError, CommandInput.FindEvents] =
     ???
 
 }
