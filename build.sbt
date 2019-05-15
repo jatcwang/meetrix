@@ -50,7 +50,6 @@ lazy val server = Project("server", file("server"))
       // Logging library
       "ch.qos.logback" % "logback-classic" % LogbackVersion
     ),
-  )
   .settings(commonSettings)
 
 lazy val commonSettings = Seq(

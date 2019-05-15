@@ -2,5 +2,10 @@ package org.scalabridge.meetrix.models
 
 sealed trait Location
 
-case object London extends Location
-case object NewYork extends Location
+object Location {
+
+  case class London() extends Location
+
+  case class NewYork() extends Location
+
+}
