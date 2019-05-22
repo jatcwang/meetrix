@@ -1,4 +1,4 @@
-val Http4sVersion    = "0.20.0-RC1"
+val Http4sVersion    = "0.20.1"
 val CirceVersion     = "0.11.1"
 val ScalaTestVersion = "3.0.7"
 val LogbackVersion   = "1.2.3"
@@ -25,6 +25,9 @@ lazy val cli = Project("cli", file("cli"))
       // Test library
       "org.scalatest" %% "scalatest" % ScalaTestVersion % "test",
 
+      // Pretty printing
+      "com.lihaoyi" %% "pprint" % "0.5.3",
+
       // Logging library
       "ch.qos.logback" % "logback-classic" % LogbackVersion
     )
@@ -50,6 +53,7 @@ lazy val server = Project("server", file("server"))
       // Logging library
       "ch.qos.logback" % "logback-classic" % LogbackVersion
     ),
+  )
   .settings(commonSettings)
 
 lazy val commonSettings = Seq(

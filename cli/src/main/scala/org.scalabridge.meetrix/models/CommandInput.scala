@@ -9,7 +9,7 @@ object CommandInput {
     *
     * @param desc If true, show newest past events first
     */
-  final case class ListPastEvents(desc: Option[Boolean]) extends CommandInput
+  final case class ListEvents(past: Option[Boolean], desc: Option[Boolean]) extends CommandInput
 
   final case class ListMyGroups() extends CommandInput
 

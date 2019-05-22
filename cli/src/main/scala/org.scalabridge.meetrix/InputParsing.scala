@@ -1,7 +1,7 @@
 package org.scalabridge.meetrix
 
 import org.scalabridge.meetrix.models.{Category, CommandInput, Location}
-import org.scalabridge.meetrix.models.CommandInput.{FindEvents, FindGroups, ListMyGroups, ListPastEvents}
+import org.scalabridge.meetrix.models.CommandInput.{FindEvents, FindGroups, ListEvents, ListMyGroups}
 
 /** Functions which are used to parse user input (command line arguments) */
 object InputParsing {
@@ -14,21 +14,23 @@ object InputParsing {
 
       case firstArg :: otherArguments =>
         firstArg match {
-          case "myevents" => parsePastEventsCommand(otherArguments)
-          case "mygroups" => Right(ListMyGroups()) // No arguments required
-          case "findgroups" => parseFindGroupsCommand(otherArguments)
-          case "findevents" => parseFindEventsCommand(otherArguments)
+          case "myevents"      => parseListEventsCommand(otherArguments)
+          case "mygroups"      => Right(ListMyGroups()) // No arguments required
+          case "findgroups"    => parseFindGroupsCommand(otherArguments)
+          case "findevents"    => parseFindEventsCommand(otherArguments)
           case unrecognizedCmd => Left(ParseError(s"Unrecognized command $unrecognizedCmd"))
         }
     }
   }
 
-  def parsePastEventsCommand(args: List[String]): Either[ParseError, CommandInput.ListPastEvents] = {
+  def parseListEventsCommand(args: List[String]): Either[ParseError, CommandInput.ListEvents] = {
     for {
       argsLookup: Map[String, String] <- parseIntoArgumentLookup(args)
+      _ = println(argsLookup)
 
       description <- optionalParse(argsLookup.get("desc"), parseBoolean)
-    } yield ListPastEvents(desc = description)
+      past        <- optionalParse(argsLookup.get("past"), parseBoolean)
+    } yield ListEvents(past = past, desc = description)
   }
 
   def parseFindGroupsCommand(args: List[String]): Either[ParseError, CommandInput.FindGroups] = {
@@ -62,8 +64,8 @@ object InputParsing {
     val parsedKeyAndValues: List[Either[ParseError, (String, String)]] = args.map { argument =>
       // each argument must be of the form 'key=value' in order to be parsed correctly
       argument.split("=").toList match {
-        case key :: value :: Nil => Right(key -> value)
-        case _                   => Left(ParseError(s"Invalid argument '$argument'. Expecting argument of form key=value"))
+        case key :: value :: Nil if key.startsWith("--") => Right(key.drop(2) -> value)
+        case _                   => Left(ParseError(s"Invalid argument '$argument'. Expecting argument of form --key=value"))
       }
     }
 
@@ -78,7 +80,7 @@ object InputParsing {
             case Right(accumulatedKeyValues) =>
               thisArgumentParseResult match {
                 case Right(keyValue) => Right(accumulatedKeyValues :+ keyValue)
-                case Left(error)         => Left(error)
+                case Left(error)     => Left(error)
               }
             case Left(error) => Left(error)
           }
