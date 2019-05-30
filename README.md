@@ -55,7 +55,7 @@ Here are some example Meetup.com API endpoints you can use
 Thus the command line interface should look something like:
 
 ```
-meetrix myevents --past
+meetrix myevents --past=true
 
 meetrix mygroups
 
